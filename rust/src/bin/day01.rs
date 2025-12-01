@@ -4,14 +4,6 @@ use std::fs;
 
 const INPUT_FILE: &str = "../inputs/day01.txt";
 
-fn modulo(x: i32, y: i32) -> i32 {
-    ((x % y) + y) % y
-}
-
-fn div(x: i32, y: i32) -> i32 {
-    (x - modulo(x, y)) / y
-}
-
 fn parse_input() -> Vec<i32> {
     fn parse(input: &str) -> i32 {
         let (direction, remainder) = input.split_at(1);
@@ -29,30 +21,29 @@ fn parse_input() -> Vec<i32> {
         .collect()
 }
 
-fn solve_p1(input: &Vec<i32>) -> u32 {
-    let mut pos: i32 = 50;
-    let mut zeros: u32 = 0;
-    for rotation in input {
-        pos = modulo(pos + rotation, 100);
-        if pos == 0 {
-            zeros += 1;
-        }
-    }
-    zeros
+fn solve_p1(input: &[i32]) -> u32 {
+    input
+        .iter()
+        .fold((50, 0_u32), |(pos, zeros), &rotation| {
+            let pos = (pos + rotation).rem_euclid(100);
+            let zeros = zeros + u32::from(pos == 0);
+            (pos, zeros)
+        })
+        .1
 }
 
-fn solve_p2(input: &Vec<i32>) -> u32 {
+fn solve_p2(input: &[i32]) -> u32 {
     let mut pos: i32 = 50;
     let mut zeros: u32 = 0;
-    for rotation in input {
+    for &rotation in input {
         let start = pos;
         pos += rotation;
-        zeros += div(pos, 100).abs() as u32;
-        if (*rotation < 0) && (start == 0) {
+        zeros += pos.div_euclid(100).abs() as u32;
+        if rotation.is_negative() && start == 0 {
             zeros -= 1;
         }
-        pos = modulo(pos, 100);
-        if (pos == 0) && (*rotation < 0) {
+        pos = pos.rem_euclid(100);
+        if pos == 0 && rotation.is_negative() {
             zeros += 1;
         }
     }
