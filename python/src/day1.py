@@ -2,7 +2,7 @@
 Advent of Code 2025 day 1
 """
 
-INPUT_FILE = "inputs/day1.txt"
+INPUT_FILE = "../inputs/day1.txt"
 
 def parse_input():
     with open(INPUT_FILE, "r") as f:
