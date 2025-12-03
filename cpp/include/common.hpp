@@ -8,5 +8,6 @@
 #include <string>
 #include <cmath>
 #include <utility>
+#include <ranges>
 
 #endif
