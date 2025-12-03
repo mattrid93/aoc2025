@@ -11,3 +11,6 @@ wheels/
 
 # Rust stuff
 rust/target
+
+# C++
+cpp/bin
