@@ -18,6 +18,9 @@ Interval parse_interval(const string& line) {
 
 Intervals collapse_intervals(const Intervals& intervals) {
     Intervals collapsed{};
+    if (intervals.empty()) {
+        return collapsed;
+    }
     size_t i = 0;
     auto [start, end] = intervals.front();
     while (i < intervals.size()) {
@@ -37,7 +40,7 @@ Intervals collapse_intervals(const Intervals& intervals) {
 
 Input parse_input() {
     auto infile = ifstream(INPUT_FILE);
-    auto intervals = Intervals();
+    Intervals intervals;
     auto ids = Ids();
     string line;
     bool p1 = true;
@@ -59,30 +62,30 @@ Input parse_input() {
 }
 
 pair<int_t, int_t> solve(const Input& input) {
-    auto [intervals, ids] = input;
+    const auto& [intervals, ids] = input;
     int_t p1_result = 0;
     int_t p2_result = 0;
 
-    auto starts = vector<int_t>();
-    auto ends = vector<int_t>();
-    int_t prev = 0;
-    for (auto i : intervals) {
-        starts.push_back(i.first);
-        ends.push_back(i.second);
-        p2_result += i.second - i.first + 1;
+    for (const auto& [start, end] : intervals) {
+        p2_result += end - start + 1;
     }
 
     for (auto ingredient : ids) {
-        if (ingredient < starts.front() || ingredient > ends.back()) {
+        if (ingredient < intervals.front().first || ingredient > intervals.back().second) {
             continue;
         }
-        auto idx = lower_bound(ends.begin(), ends.end(), ingredient);
-        if (ingredient >= starts.at(idx - ends.begin())) {
+        auto idx = lower_bound(
+            intervals.begin(), intervals.end(), ingredient,
+            [](const Interval& interval, int_t value) {
+                return interval.second < value;
+            }
+        );
+        if (idx != intervals.end() && ingredient >= idx->first) {
             p1_result++;
         }
     }
 
-    return make_pair(p1_result, p2_result);
+    return {p1_result, p2_result};
 }
 
 int main() {
