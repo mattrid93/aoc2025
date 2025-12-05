@@ -63,6 +63,11 @@ Input parse_input() {
 
 pair<int_t, int_t> solve(const Input& input) {
     const auto& [intervals, ids] = input;
+
+    if (intervals.empty()) {
+        return {0, 0};
+    }
+
     int_t p1_result = 0;
     int_t p2_result = 0;
 
