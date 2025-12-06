@@ -4,6 +4,7 @@ Advent of Code 2025 day 1
 
 INPUT_FILE = "../inputs/day01.txt"
 
+
 def parse_input():
     with open(INPUT_FILE, "r") as f:
         return [_.strip() for _ in f.readlines()]
@@ -47,6 +48,7 @@ def main():
     data = parse_input()
     print(f"Part 1 = {solve_p1(data)}")
     print(f"Part 2 = {solve_p2(data)}")
+
 
 if __name__ == "__main__":
     main()
