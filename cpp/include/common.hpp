@@ -9,5 +9,7 @@
 #include <cmath>
 #include <utility>
 #include <ranges>
+#include <sstream>
+#include <numeric>
 
 #endif
